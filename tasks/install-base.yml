@@ -1,0 +1,29 @@
+---
+
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 1800
+  with_items:
+    - build-essential
+    - gcc
+    - gcc-multilib
+    - bison
+    - binutils
+    - git
+    - mercurial
+    - curl
+    - ruby-dev
+    - rpm
+    - zip
+    - python-boto
+  become: yes
+
+- name: Install FPM
+  command: gem install fpm
+  args:
+    creates: /usr/local/bin/fpm
+  become: yes
+
