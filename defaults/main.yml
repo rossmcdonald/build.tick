@@ -1,13 +1,13 @@
 ---
 # Go version to build from (untested on anything other than 1.4.2)
-go_version: 1.4.2
+influxdb_go_version: 1.4.2
 
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
-upload_to_s3: no
+influxdb_upload_to_s3: no
 
 # Build parameters
-influxdb_build_platform: linux
-influxdb_build_arch: amd64
+influxdb_build_platform: all
+influxdb_build_arch: all
 influxdb_build_nightly: yes
 
 # The repo to pull from

@@ -1,26 +1,26 @@
 ---
 
-- name: Create temporary directory [influxdb]
+- name: Create temporary directory
   command: mktemp -d
   register: temp_dir
 
-- name: Create directory structure [influxdb]
+- name: Create directory structure
   file:
     path: "{{ temp_dir.stdout }}/src/{{ influxdb_repo_base_path }}"
     state: directory
     
-- name: Clone repository [influxdb]
+- name: Clone InfluxDB repository
   git:
     repo: "{{ influxdb_repo_url }}"
     dest: "{{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb"
     version: "{{ influxdb_build_branch }}"
 
-- name: Build [influxdb]
-  command: ./build.py {% if influxdb_build_nightly %}--nightly {% endif %} --package {% if upload_to_s3 %}--upload {% endif %} --version={{ influxdb_master_version }} --platform={{ influxdb_build_platform }} --arch={{ influxdb_build_arch }} --clean {% if influxdb_rc is defined %}--rc={{ influxdb_rc }} {% endif %} chdir={{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb
+- name: Build InfluxDB
+  command: ./build.py {% if influxdb_build_nightly %}--nightly {% endif %} --package {% if influxdb_upload_to_s3 %}--upload {% endif %} {% if influxdb_master_version != None %}--version={{ influxdb_master_version }} {% endif %} --platform={{ influxdb_build_platform }} --arch={{ influxdb_build_arch }} --clean {% if influxdb_rc != None %}--rc={{ influxdb_rc }} {% endif %} chdir={{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb
   environment:
     GOPATH: "{{ temp_dir.stdout }}"
-    GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ go_version }}"
-    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ go_version }}/bin:{{ ansible_env.PATH }}"
+    GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}"
+    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}/bin:{{ ansible_env.PATH }}"
     AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   register: build_output

@@ -7,7 +7,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "ansible" do |ansible|
     ansible.extra_vars = {
       is_vagrant: true,
-      upload_to_s3: false
+      influxdb_upload_to_s3: false
     }
     ansible.playbook = "build.yml"
   end

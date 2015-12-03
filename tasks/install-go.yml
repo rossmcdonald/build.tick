@@ -18,11 +18,11 @@
   
 - name: Check for Go
   stat:
-    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ go_version }}"
+    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}"
   register: go_installed
   
 - name: Install Go
-  shell: . {{ ansible_env.HOME }}/.bashrc && {{ ansible_env.HOME }}/.gvm/bin/gvm install go{{ go_version }} --binary
+  shell: . {{ ansible_env.HOME }}/.bashrc && {{ ansible_env.HOME }}/.gvm/bin/gvm install go{{ influxdb_go_version }} --binary
   environment:
     GVM_ROOT: "{{ ansible_env.HOME }}/.gvm"
   when: go_installed.stat.exists is defined and go_installed.stat.exists == False
