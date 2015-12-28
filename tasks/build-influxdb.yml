@@ -25,6 +25,9 @@
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   register: build_output
 
+- debug:
+    var: build_output
+
 - name: Create Vagrant output directory
   file:
     path: /vagrant/build-output/influxdb
