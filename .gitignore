@@ -2,3 +2,4 @@
 requirements.txt
 build-output/
 .vagrant/
+*private.yml
