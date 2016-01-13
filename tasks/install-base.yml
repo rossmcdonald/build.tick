@@ -19,11 +19,11 @@
     - rpm
     - zip
     - python-boto
-  become: yes
+    - lintian
+    - emacs24-nox
 
 - name: Install FPM
   command: gem install fpm
   args:
     creates: /usr/local/bin/fpm
-  become: yes
 
