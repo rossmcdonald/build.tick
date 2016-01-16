@@ -1,13 +1,12 @@
 ---
-# Go version to build from (untested on anything other than 1.4.2)
-influxdb_go_version: 1.4.2
+influxdb_go_version: 1.4.3
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
 influxdb_upload_to_s3: no
 
 # Build platform (linux, darwin, windows)
-influxdb_build_platform: linux
+influxdb_build_platform: all
 # Build architecture (arm, amd64, 386)
-influxdb_build_arch: amd64
+influxdb_build_arch: all
 # The repo to pull from
 influxdb_repo_url: https://github.com/influxdb/influxdb.git
 # Base path (from the build directory) where the repository should be cloned to
@@ -15,10 +14,10 @@ influxdb_repo_base_path: src/github.com/influxdb
 # The branch to build
 influxdb_build_branch: master
 # Version to apply to the package (if none is applied, the version will attempt to be determined by the most recent tag)
-influxdb_master_version: 0.9.6
+influxdb_master_version: 0.10.0
 # Whether this is a nightly build
 influxdb_build_nightly: yes
 # Release-candidate (if applicable)
-influxdb_rc: 
-# Release iteration (if applicable, defaults to 1 for RPM packages)
+influxdb_rc:
+# Release iteration (if applicable, defaults to 1 if not specified)
 influxdb_iteration: 
