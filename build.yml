@@ -27,4 +27,3 @@
         body: "Hello, I wanted to let you know that the nightly builds encountered a failure. The full logs are attached.\n\n{{ ansible_date_time.iso8601 }}"
         attach: /var/log/influxdb-nightly-build.log
       when: email_username is defined and email_username != None and email_password is defined and email_password != None and build_output.rc != 0
-    

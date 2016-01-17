@@ -3,12 +3,13 @@
 
 Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
+  config.vm.hostname = "build-box"
   
   config.vm.provision "ansible" do |ansible|
     ansible.extra_vars = {
-      is_vagrant: true,
-      influxdb_upload_to_s3: false
+      is_vagrant: true
     }
     ansible.playbook = "build.yml"
+    ansible.sudo = true
   end
 end
