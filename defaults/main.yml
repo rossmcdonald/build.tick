@@ -2,9 +2,10 @@
 influxdb_go_version: 1.4.3
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
 influxdb_upload_to_s3: no
+influxdb_upload_bucket: influxdb
 
 # Build platform (linux, darwin, windows)
-influxdb_build_platform: all
+influxdb_build_platform: linux
 # Build architecture (arm, amd64, 386)
 influxdb_build_arch: all
 # The repo to pull from
@@ -14,7 +15,7 @@ influxdb_repo_base_path: src/github.com/influxdb
 # The branch to build
 influxdb_build_branch: master
 # Version to apply to the package (if none is applied, the version will attempt to be determined by the most recent tag)
-influxdb_master_version: 0.10.0
+influxdb_master_version:
 # Whether this is a nightly build
 influxdb_build_nightly: yes
 # Release-candidate (if applicable)

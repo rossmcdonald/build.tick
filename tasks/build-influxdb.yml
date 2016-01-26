@@ -16,7 +16,7 @@
     version: "{{ influxdb_build_branch }}"
 
 - name: Build InfluxDB
-  command: ./build.py {% if influxdb_build_nightly %}--nightly {% endif %} --package {% if influxdb_upload_to_s3 %}--upload {% endif %} {% if influxdb_master_version != None %}--version={{ influxdb_master_version }} {% endif %} --platform={{ influxdb_build_platform }} --arch={{ influxdb_build_arch }} --clean {% if influxdb_rc != None %} --rc={{ influxdb_rc }} {% endif %}{% if influxdb_iteration != None %} --iteration={{ influxdb_iteration }} {% endif %} chdir={{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb
+  command: ./build.py {% if influxdb_build_nightly %}--nightly {% endif %} --package {% if influxdb_upload_to_s3 %}--upload {% endif %} {% if influxdb_master_version != None %}--version={{ influxdb_master_version }} {% endif %} --platform={{ influxdb_build_platform }} --arch={{ influxdb_build_arch }} --clean {% if influxdb_rc != None %} --rc={{ influxdb_rc }} {% endif %}{% if influxdb_iteration != None %} --iteration={{ influxdb_iteration }} {% endif %}{% if influxdb_upload_bucket != None %} --bucket={{ influxdb_upload_bucket }}{% endif %} chdir={{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb
   environment:
     GOPATH: "{{ temp_dir.stdout }}"
     GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}"
