@@ -4,7 +4,7 @@
 
 - include: install-go.yml
 
-- include: build-influxdb.yml
+- include: build.yml
 
 - include: email.yml
 
