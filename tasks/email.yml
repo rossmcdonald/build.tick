@@ -19,5 +19,5 @@
     to: "{{ email_to }}"
     from: "{{ email_from }}"
     subject: "[bot] - {{ build_package_name }} - Build Failure"
-    body: "Hello, I wanted to let you know that the {{ build_package_name|title }} {% if build_nightly %}nightly {% endif %} builds encountered a failure during the build process.\nHere is the output from the run:\n{{ build_output.stdout_lines }}\n\n{{ ansible_date_time.iso8601 }}"
+    body: "Hello, I wanted to let you know that the {{ build_package_name|title }} {% if build_nightly %}nightly {% endif %} builds encountered a failure during the build process. Here is the output from the run:\n\n{{ build_output.stdout_lines|join('\n') }}\n\n{{ ansible_date_time.iso8601 }}"
   when: email_username is defined and email_username != None and email_password is defined and email_password != None and build_output.rc != 0
