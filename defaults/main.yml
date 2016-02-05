@@ -1,5 +1,5 @@
 ---
-build_go_version: 1.5.3
+build_go_version: 1.4.3
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
 build_upload_to_s3: no
 build_upload_bucket: influxdata-downloads
@@ -9,12 +9,12 @@ build_platform: linux
 # Build architecture (arm, amd64, i386)
 build_arch: amd64
 # The repo to pull from
-build_repo_url: https://github.com/influxdata/kapacitor
+build_repo_url: https://github.com/influxdb/influxdb
 
 # The branch to build
 build_branch: master
 # Version to apply to the package (if none is applied, the version will attempt to be determined by the most recent tag)
-build_master_version: 
+build_master_version: 0.10.1
 # Whether this is a nightly build
 build_nightly: yes
 # Release-candidate (if applicable)
