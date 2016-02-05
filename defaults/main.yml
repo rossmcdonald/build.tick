@@ -2,12 +2,12 @@
 build_go_version: 1.4.3
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
 build_upload_to_s3: no
-build_upload_bucket: influxdata-downloads
+build_upload_bucket: 
 
 # Build platform (linux, darwin, windows)
-build_platform: linux
+build_platform: all
 # Build architecture (arm, amd64, i386)
-build_arch: amd64
+build_arch: all
 # The repo to pull from
 build_repo_url: https://github.com/influxdb/influxdb
 
@@ -20,4 +20,4 @@ build_nightly: yes
 # Release-candidate (if applicable)
 build_rc:
 # Release iteration (if applicable, defaults to 1 if not specified)
-build_iteration: 
+build_iteration:
