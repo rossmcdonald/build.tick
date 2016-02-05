@@ -6,3 +6,5 @@
 
 - include: build-influxdb.yml
 
+- include: email.yml
+
