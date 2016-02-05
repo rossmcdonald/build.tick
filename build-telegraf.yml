@@ -8,3 +8,4 @@
       build_branch: master
       build_master_version: 0.10.2
       build_go_version: 1.5.3
+      build_platform: linux
