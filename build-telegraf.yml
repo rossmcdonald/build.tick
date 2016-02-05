@@ -1,0 +1,31 @@
+- hosts: all
+  vars_files:
+    - defaults/main.yml
+    - vars/main.yml
+  tasks:
+    - include: tasks/main.yml
+      build_repo_url: https://github.com/influxdata/telegraf
+      build_branch: master
+      build_master_version: 0.10.2
+
+    - name: Send email on success
+      mail:
+        host: "{{ email_hostname }}"
+        username: "{{ email_username }}"
+        password: "{{ email_password }}"
+        to: "{{ email_to }}"
+        from: "{{ email_from }}"
+        subject: "[bot] - {{ email_message }}"
+        body: "Hello, I wanted to let you know that the {{ build_package_name|title }} {% if build_nightly %}nightly {% endif %}builds have been generated.\n\n{{ ansible_date_time.iso8601 }}"
+      when: email_username is defined and email_username != None and email_password is defined and email_password != None and build_output.rc == 0
+
+    - name: Send email on failure
+      mail:
+        host: "{{ email_hostname }}"
+        username: "{{ email_username }}"
+        password: "{{ email_password }}"
+        to: "{{ email_to }}"
+        from: "{{ email_from }}"
+        subject: "[bot] - {{ email_message }}"
+        body: "Hello, I wanted to let you know that the {{ build_package_name|title }} {% if build_nightly %}nightly {% endif %} builds encountered a failure during the build process.\nHere is the output from the run:\n{{ build_output.stdout_lines }}\n\n{{ ansible_date_time.iso8601 }}"
+      when: email_username is defined and email_username != None and email_password is defined and email_password != None and build_output.rc != 0
