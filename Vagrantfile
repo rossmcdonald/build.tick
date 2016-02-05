@@ -9,7 +9,9 @@ Vagrant.configure(2) do |config|
     ansible.extra_vars = {
       is_vagrant: true
     }
-    ansible.playbook = "build.yml"
+    ansible.playbook = "build-influxdb.yml"
+    # ansible.playbook = "build-telegraf.yml"
+    # ansible.playbook = "build-kapacitor.yml"
     ansible.sudo = true
   end
 end
