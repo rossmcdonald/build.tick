@@ -20,7 +20,6 @@
     - zip
     - python-boto
     - lintian
-    - emacs24-nox
 
 - name: Install FPM
   command: gem install fpm

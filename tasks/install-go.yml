@@ -10,6 +10,7 @@
     url: https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer
     dest: /tmp
     mode: 0700
+    validate_certs: no
   when: gvm_installed.stat.exists is defined and gvm_installed.stat.exists == False
 
 - name: Install GVM
@@ -18,20 +19,20 @@
   
 - name: Check for Go
   stat:
-    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}"
+    path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}"
   register: go_installed
   
 - name: Install Go
-  shell: "{{ ansible_env.HOME }}/.gvm/bin/gvm install go{{ influxdb_go_version }} --binary"
+  shell: "{{ ansible_env.HOME }}/.gvm/bin/gvm install go{{ build_go_version }} --binary"
   environment:
     GVM_ROOT: "{{ ansible_env.HOME }}/.gvm"
   when: go_installed.stat.exists is defined and go_installed.stat.exists == False
 
 - name: Bootstrap Go for cross-compilation (this will take some time)
-  command: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}/src/make.bash --no-clean"
+  command: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/src/make.bash --no-clean"
   args:
-    creates: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}/bin/{{ item.platform }}_{{ item.architecture }}"
-    chdir: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}/src"
+    creates: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin/{{ item.platform }}_{{ item.architecture }}"
+    chdir: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/src"
   environment:
     GOARCH: "{{ item.architecture }}"
     GOOS: "{{ item.platform }}"
@@ -46,4 +47,5 @@
       architecture: 386
     - platform: darwin
       architecture: amd64
+  when: "'1.4' in build_go_version"
 

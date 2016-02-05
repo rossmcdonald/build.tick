@@ -4,41 +4,53 @@
   command: mktemp -d
   register: temp_dir
 
+- name: Set build facts
+  set_fact:
+    build_src_path: "{{ build_repo_url.split('/')[-3:-1]|join('/') }}"
+    build_repo_path: "{{ build_repo_url.split('/')[-3:]|join('/') }}"
+    build_package_name: "{{ build_repo_url.split('/')[-1:][0] }}"
+
 - name: Create directory structure
   file:
-    path: "{{ temp_dir.stdout }}/src/{{ influxdb_repo_base_path }}"
+    path: "{{ temp_dir.stdout }}/src/{{ build_src_path }}"
     state: directory
     
-- name: Clone InfluxDB repository
+- name: Clone repository
   git:
-    repo: "{{ influxdb_repo_url }}"
-    dest: "{{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb"
-    version: "{{ influxdb_build_branch }}"
+    repo: "{{ build_repo_url }}"
+    dest: "{{ temp_dir.stdout }}/src/{{ build_repo_path }}/"
+    version: "{{ build_branch }}"
 
-- name: Build InfluxDB
-  command: ./build.py {% if influxdb_build_nightly %}--nightly {% endif %} --package {% if influxdb_upload_to_s3 %}--upload {% endif %} {% if influxdb_master_version != None %}--version={{ influxdb_master_version }} {% endif %} --platform={{ influxdb_build_platform }} --arch={{ influxdb_build_arch }} --clean {% if influxdb_rc != None %} --rc={{ influxdb_rc }} {% endif %}{% if influxdb_iteration != None %} --iteration={{ influxdb_iteration }} {% endif %}{% if influxdb_upload_bucket != None %} --bucket={{ influxdb_upload_bucket }}{% endif %} chdir={{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb
+- name: Build 
+  command: ./build.py {% if build_nightly %}--nightly {% endif %} --package {% if build_upload_to_s3 %}--upload {% endif %} {% if build_master_version != None %}--version={{ build_master_version }} {% endif %} --platform={{ build_platform }} --arch={{ build_arch }} --clean {% if build_rc != None %} --rc={{ build_rc }} {% endif %}{% if build_iteration != None %} --iteration={{ build_iteration }} {% endif %}{% if build_upload_bucket != None %} --bucket={{ build_upload_bucket }}{% endif %}
+  args:
+     chdir: "{{ temp_dir.stdout }}/src/{{ build_repo_path }}"
   environment:
     GOPATH: "{{ temp_dir.stdout }}"
-    GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}"
-    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ influxdb_go_version }}/bin:{{ ansible_env.PATH }}"
+    GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}"
+    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin:{{ ansible_env.PATH }}"
     AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   register: build_output
   ignore_errors: yes
 
+- name: Display build output
+  debug:
+    var: build_output.stdout_lines
+
 - name: Create Vagrant output directory
   file:
-    path: /vagrant/build-output/influxdb
+    path: /vagrant/build-output/{{ build_package_name|string }}
     state: directory
   when: is_vagrant
 
 - name: Find newly-built packages
-  command: find {{ temp_dir.stdout }}/{{ influxdb_repo_base_path }}/influxdb -name '*deb' -o -name '*rpm' -o -name '*tar' -o -name '*zip'
+  command: find {{ temp_dir.stdout }}/src/{{ build_repo_path }} -name '*deb' -o -name '*rpm' -o -name '*gz' -o -name '*zip'
   register: find_packages
   when: is_vagrant
 
 - name: Copy newly-built packages to Vagrant root directory
-  command: mv {{ item }} /vagrant/build-output/influxdb/
+  command: mv {{ item }} /vagrant/build-output/{{ build_package_name|string }}/
   with_items:
     - "{{ find_packages.stdout_lines }}"
   when: is_vagrant
