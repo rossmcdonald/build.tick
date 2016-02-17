@@ -27,8 +27,9 @@
      chdir: "{{ temp_dir.stdout }}/src/{{ build_repo_path }}"
   environment:
     GOPATH: "{{ temp_dir.stdout }}"
+    GOBIN: "{{ temp_dir.stdout }}/bin"
     GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}"
-    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin:{{ temp_dir.stdout }}/bin:{{ ansible_env.PATH }}"
     AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   register: build_output

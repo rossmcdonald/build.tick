@@ -1,20 +1,21 @@
 ---
+build_send_result_email: no
 build_go_version: 1.4.3
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
 build_upload_to_s3: no
 build_upload_bucket: 
 
 # Build platform (linux, darwin, windows)
-build_platform: all
+build_platform: linux
 # Build architecture (arm, amd64, i386)
-build_arch: all
+build_arch: amd64
 # The repo to pull from
-build_repo_url: https://github.com/influxdb/influxdb
+build_repo_url: https://github.com/influxdata/influxdb
 
 # The branch to build
 build_branch: master
 # Version to apply to the package (if none is applied, the version will attempt to be determined by the most recent tag)
-build_master_version: 0.10.1
+build_master_version: 0.11.0
 # Whether this is a nightly build
 build_nightly: yes
 # Release-candidate (if applicable)

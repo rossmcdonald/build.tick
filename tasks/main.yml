@@ -7,4 +7,4 @@
 - include: build.yml
 
 - include: email.yml
-
+  when: build_send_result_email

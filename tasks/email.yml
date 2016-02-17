@@ -7,9 +7,19 @@
     password: "{{ email_password }}"
     to: "{{ email_to }}"
     from: "{{ email_from }}"
-    subject: "[bot] - {{ build_package_name }} - Build Success"
+    subject: "[ansible] - {{ build_package_name }} - Build Success"
     body: "Hello, I wanted to let you know that the {{ build_package_name|title }} {% if build_nightly %}nightly {% endif %}builds have been generated.\n\n{{ ansible_date_time.iso8601 }}"
-  when: email_username is defined and email_username != None and email_password is defined and email_password != None and build_output.rc == 0
+  when: (email_username is defined) and
+        (email_password is defined) and
+        (email_to is defined) and
+        (email_from is defined) and
+        (email_hostname is defined) and
+        (email_username != None) and
+        (email_password != None) and
+        (email_to != None) and
+        (email_from != None) and
+        (email_hostname != None) and
+        (build_output.rc != 0)
 
 - name: Send email on failure
   mail:
@@ -18,6 +28,16 @@
     password: "{{ email_password }}"
     to: "{{ email_to }}"
     from: "{{ email_from }}"
-    subject: "[bot] - {{ build_package_name }} - Build Failure"
+    subject: "[ansible] - {{ build_package_name }} - Build Failure"
     body: "Hello, I wanted to let you know that the {{ build_package_name|title }} {% if build_nightly %}nightly {% endif %} builds encountered a failure during the build process. Here is the output from the run:\n\n{{ build_output.stdout_lines|join('\n') }}\n\n{{ ansible_date_time.iso8601 }}"
-  when: email_username is defined and email_username != None and email_password is defined and email_password != None and build_output.rc != 0
+  when: (email_username is defined) and
+        (email_password is defined) and
+        (email_to is defined) and
+        (email_from is defined) and
+        (email_hostname is defined) and
+        (email_username != None) and
+        (email_password != None) and
+        (email_to != None) and
+        (email_from != None) and
+        (email_hostname != None) and
+        (build_output.rc != 0)
