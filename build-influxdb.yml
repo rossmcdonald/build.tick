@@ -4,7 +4,7 @@
     - vars/main.yml
   tasks:
     - include: tasks/main.yml
-      build_repo_url: https://github.com/influxdb/influxdb
+      build_repo_url: https://github.com/influxdata/influxdb
       build_branch: master
-      build_master_version: 0.10.1
+      build_master_version: 0.11.0
       build_go_version: 1.4.3
