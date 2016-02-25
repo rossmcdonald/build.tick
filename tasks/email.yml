@@ -19,8 +19,9 @@
         (email_to != None) and
         (email_from != None) and
         (email_hostname != None) and
-        (build_output.rc == 0)
-
+        (build_output.rc == 0) and
+        (build_send_result_on_success)
+        
 - name: Send email on failure
   mail:
     host: "{{ email_hostname }}"
@@ -40,4 +41,5 @@
         (email_to != None) and
         (email_from != None) and
         (email_hostname != None) and
-        (build_output.rc != 0)
+        (build_output.rc != 0) and
+        (build_send_result_on_failure)

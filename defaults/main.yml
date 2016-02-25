@@ -1,10 +1,15 @@
 ---
+build_dir: /tmp
+
 build_send_result_email: no
+build_send_result_on_failure: yes
+build_send_result_on_success: no
+
 build_go_version: 1.4.3
 # Whether or not to upload artifacts to S3 (requires AWS credentials to be included)
 build_upload_to_s3: no
 build_upload_bucket: 
-
+  
 # Build platform (linux, darwin, windows)
 build_platform: linux
 # Build architecture (arm, amd64, i386)
