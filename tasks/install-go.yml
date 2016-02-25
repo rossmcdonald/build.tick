@@ -47,5 +47,9 @@
       architecture: 386
     - platform: darwin
       architecture: amd64
+    - platform: windows
+      architecture: 386
+    - platform: windows
+      architecture: amd64
   when: "'1.4' in build_go_version"
 
