@@ -19,7 +19,7 @@
         (email_to != None) and
         (email_from != None) and
         (email_hostname != None) and
-        (build_output.rc != 0)
+        (build_output.rc == 0)
 
 - name: Send email on failure
   mail:

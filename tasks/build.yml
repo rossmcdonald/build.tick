@@ -1,35 +1,35 @@
 ---
 
-- name: Create temporary directory
-  command: mktemp -d
-  register: temp_dir
-
 - name: Set build facts
   set_fact:
     build_src_path: "{{ build_repo_url.split('/')[-3:-1]|join('/') }}"
     build_repo_path: "{{ build_repo_url.split('/')[-3:]|join('/') }}"
     build_package_name: "{{ build_repo_url.split('/')[-1:][0] }}"
 
+- name: Set build directory
+  set_fact:
+    temp_dir: "{{ build_dir }}/{{ build_package_name }}"
+
 - name: Create directory structure
   file:
-    path: "{{ temp_dir.stdout }}/src/{{ build_src_path }}"
+    path: "{{ temp_dir }}/src/{{ build_src_path }}"
     state: directory
     
 - name: Clone repository
   git:
     repo: "{{ build_repo_url }}"
-    dest: "{{ temp_dir.stdout }}/src/{{ build_repo_path }}/"
+    dest: "{{ temp_dir }}/src/{{ build_repo_path }}/"
     version: "{{ build_branch }}"
 
 - name: Build 
   command: ./build.py --package {% if build_upload_to_s3 %}--upload {% endif %} {% if build_master_version != None %}--version={{ build_master_version }} {% endif %} --platform={{ build_platform }} --arch={{ build_arch }} --clean {% if build_rc != None %} --rc={{ build_rc }} {% endif %}{% if build_iteration != None %} --iteration={{ build_iteration }} {% endif %}{% if build_upload_bucket != None %} --bucket={{ build_upload_bucket }}{% endif %} {% if build_nightly %}--nightly {% endif %}
   args:
-     chdir: "{{ temp_dir.stdout }}/src/{{ build_repo_path }}"
+     chdir: "{{ temp_dir }}/src/{{ build_repo_path }}"
   environment:
-    GOPATH: "{{ temp_dir.stdout }}"
-    GOBIN: "{{ temp_dir.stdout }}/bin"
+    GOPATH: "{{ temp_dir }}"
+    GOBIN: "{{ temp_dir }}/bin"
     GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}"
-    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin:{{ temp_dir.stdout }}/bin:{{ ansible_env.PATH }}"
+    PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin:{{ temp_dir }}/bin:{{ ansible_env.PATH }}"
     AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   register: build_output
@@ -46,7 +46,7 @@
   when: is_vagrant
 
 - name: Find newly-built packages
-  command: find {{ temp_dir.stdout }}/src/{{ build_repo_path }} -name '*deb' -o -name '*rpm' -o -name '*gz' -o -name '*zip'
+  command: find {{ temp_dir }}/src/{{ build_repo_path }} -name '*deb' -o -name '*rpm' -o -name '*gz' -o -name '*zip'
   register: find_packages
   when: is_vagrant
 
