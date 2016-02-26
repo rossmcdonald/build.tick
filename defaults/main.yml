@@ -1,4 +1,5 @@
 ---
+build_script: build.py
 build_dir: /tmp
 
 build_send_result_email: no
