@@ -1,4 +1,5 @@
 ---
 is_vagrant: no
-
+is_docker: no
+copy_output_packages: yes
 build_run_generate: no

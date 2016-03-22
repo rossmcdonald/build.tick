@@ -69,4 +69,4 @@
   command: mv {{ item }} /{% if is_vagrant %}vagrant{% else %}ansible{% endif %}/build-output/{{ build_package_name|string }}/
   with_items:
     - "{{ find_packages.stdout_lines }}"
-  when: is_vagrant or is_docker
+  when: is_vagrant or is_docker and copy_output_packages
