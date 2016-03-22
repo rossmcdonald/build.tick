@@ -1,0 +1,46 @@
+FROM ubuntu:trusty
+MAINTAINER Ross McDonald <mcdonaldrossc+docker@gmail.com>
+
+RUN apt-get update && \
+    apt-get install -y \
+    build-essential \
+    gcc \
+    gcc-multilib \
+    bison \
+    binutils \
+    git \
+    mercurial \
+    curl \
+    ruby-dev \
+    rpm \
+    zip \
+    python-boto \
+    ansible \
+    python-apt
+
+RUN gem install fpm
+
+# Install go
+ENV GO_VERSION 1.4.3
+ENV GO_ARCH amd64
+RUN curl -sLO https://storage.googleapis.com/golang/go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
+   tar -C /usr/local/ -xf /go${GO_VERSION}.linux-${GO_ARCH}.tar.gz && \
+   rm /go${GO_VERSION}.linux-${GO_ARCH}.tar.gz
+ENV PATH /usr/local/go/bin:$PATH
+
+# Create cross-compile toolchain
+ENV GOPATH /usr/local/go
+WORKDIR $GOPATH/src
+RUN GOOS=linux GOARCH=amd64 /usr/local/go/src/make.bash --no-clean
+RUN GOOS=linux GOARCH=386 /usr/local/go/src/make.bash --no-clean
+RUN GOOS=linux GOARCH=arm /usr/local/go/src/make.bash --no-clean
+RUN GOOS=darwin GOARCH=amd64 /usr/local/go/src/make.bash --no-clean
+RUN GOOS=windows GOARCH=amd64 /usr/local/go/src/make.bash --no-clean
+RUN GOOS=windows GOARCH=386 /usr/local/go/src/make.bash --no-clean
+
+ENV PROJECT_DIR /ansible
+RUN mkdir $PROJECT_DIR
+
+WORKDIR $PROJECT_DIR
+VOLUME $PROJECT_DIR
+ENTRYPOINT [ "ansible-playbook", "-c", "local" ]
