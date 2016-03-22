@@ -21,7 +21,7 @@
     dest: "{{ temp_dir }}/src/{{ build_repo_path }}/"
     version: "{{ build_branch }}"
     ssh_opts: -o StrictHostKeyChecking=no
-    key_file: "{{ build_ssh_key_file }}"
+    key_file: "{{ build_ssh_key_file|default(None) }}"
     force: yes
 
 - name: Build 
