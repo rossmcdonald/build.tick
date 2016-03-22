@@ -1,0 +1,7 @@
+- hosts: all
+  vars_files:
+    - defaults/main.yml
+    - vars/main.yml
+  tasks:
+    - include: tasks/install-base.yml
+    - include: tasks/install-go.yml
