@@ -10,7 +10,7 @@
     url: https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer
     dest: "{{ ansible_env.HOME }}/"
     mode: 0700
-    validate_certs: yes
+    validate_certs: no
   when: gvm_installed.stat.exists is defined and gvm_installed.stat.exists == False
 
 - name: Install GVM
