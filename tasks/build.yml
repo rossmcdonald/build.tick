@@ -5,6 +5,9 @@
     build_src_path: "{{ build_repo_url.split('/')[-3:-1]|join('/') }}"
     build_repo_path: "{{ build_repo_url.split('/')[-3:]|join('/') }}"
     build_package_name: "{{ build_repo_url.split('/')[-1:][0] }}"
+
+- name: Set more build facts
+  set_fact:
     temp_dir: "{{ build_dir }}/{{ build_package_name }}"
 
 - name: Create directory structure
