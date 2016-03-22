@@ -1,8 +1,4 @@
 ---
-- include: install-base.yml
-
-- include: install-go.yml
-
 - include: build.yml
 
 - include: email.yml

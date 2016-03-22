@@ -43,4 +43,4 @@ RUN mkdir $PROJECT_DIR
 
 WORKDIR $PROJECT_DIR
 VOLUME $PROJECT_DIR
-ENTRYPOINT [ "ansible-playbook", "-c", "local" ]
+ENTRYPOINT [ "ansible-playbook", "-c", "local", "-e", "is_docker=true" ]
