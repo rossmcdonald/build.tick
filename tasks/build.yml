@@ -14,15 +14,30 @@
   file:
     path: "{{ temp_dir }}/src/{{ build_src_path }}"
     state: directory
-    
+  
 - name: Clone repository
   git:
     repo: "{{ build_repo_url }}"
     dest: "{{ temp_dir }}/src/{{ build_repo_path }}/"
     version: "{{ build_branch }}"
+    force: yes
 
 - name: Build 
-  command: "./{{ build_script }} --package {% if build_upload_to_s3 %}--upload {% endif %} {% if build_master_version != None %}--version={{ build_master_version }} {% endif %} --platform={{ build_platform }} --arch={{ build_arch }} --clean {% if build_rc != None %} --rc={{ build_rc }} {% endif %}{% if build_iteration != None %} --iteration={{ build_iteration }} {% endif %}{% if build_upload_bucket != None %} --bucket={{ build_upload_bucket }}{% endif %} {% if build_nightly %}--nightly {% endif %}"
+  command: >
+    ./{{ build_script }} 
+    --debug 
+    --package 
+    {% if build_upload_to_s3 %}--upload {% endif %}
+    {% if build_master_version != None %}--version={{ build_master_version }} {% endif %}
+    --platform={{ build_platform }} 
+    --arch={{ build_arch }} 
+    {% if build_rc != None %} --rc={{ build_rc }} {% endif %}
+    {% if build_iteration != None %} --iteration={{ build_iteration }} {% endif %}
+    {% if build_upload_bucket != None %} --bucket={{ build_upload_bucket }}{% endif %}
+    {% if build_nightly %}--nightly {% endif %}
+    {% if build_run_generate %}--generate {% endif %}
+    {% if build_tags != None %}--build-tags={{ build_tags|join(',') }} {% endif %}
+    {% if build_output_name != None %}--name={{ build_output_name }} {% endif %}
   args:
      chdir: "{{ temp_dir }}/src/{{ build_repo_path }}"
   environment:
@@ -55,3 +70,4 @@
   with_items:
     - "{{ find_packages.stdout_lines }}"
   when: is_vagrant
+

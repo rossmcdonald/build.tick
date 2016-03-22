@@ -2,26 +2,26 @@
 
 - name: Check for GVM
   stat:
-    path: ~/.gvm
+    path: "{{ ansible_env.HOME }}/.gvm"
   register: gvm_installed
 
 - name: Download GVM install script
   get_url:
     url: https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer
-    dest: /tmp
+    dest: "{{ ansible_env.HOME }}/"
     mode: 0700
-    validate_certs: no
+    validate_certs: yes
   when: gvm_installed.stat.exists is defined and gvm_installed.stat.exists == False
 
 - name: Install GVM
-  command: /tmp/gvm-installer
-  when: gvm_installed.stat.exists is defined and gvm_installed.stat.exists == False  
-  
+  command: "{{ ansible_env.HOME }}/gvm-installer"
+  when: gvm_installed.stat.exists is defined and gvm_installed.stat.exists == False
+
 - name: Check for Go
   stat:
     path: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}"
   register: go_installed
-  
+
 - name: Install Go
   shell: "{{ ansible_env.HOME }}/.gvm/bin/gvm install go{{ build_go_version }} --binary"
   environment:
@@ -52,4 +52,3 @@
     - platform: windows
       architecture: amd64
   when: "'1.4' in build_go_version"
-

@@ -21,10 +21,14 @@ build_repo_url: https://github.com/influxdata/influxdb
 # The branch to build
 build_branch: master
 # Version to apply to the package (if none is applied, the version will attempt to be determined by the most recent tag)
-build_master_version: 0.11.0
+build_master_version: 0.12.0
 # Whether this is a nightly build
 build_nightly: yes
 # Release-candidate (if applicable)
 build_rc:
 # Release iteration (if applicable, defaults to 1 if not specified)
 build_iteration:
+# Build tags to use for building the project
+build_tags:
+# Name of package to produce (if different from the default)
+build_output_name: 

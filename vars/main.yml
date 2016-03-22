@@ -1,3 +1,4 @@
 ---
 is_vagrant: no
 
+build_run_generate: no
