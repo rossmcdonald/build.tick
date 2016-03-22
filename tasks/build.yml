@@ -5,9 +5,6 @@
     build_src_path: "{{ build_repo_url.split('/')[-3:-1]|join('/') }}"
     build_repo_path: "{{ build_repo_url.split('/')[-3:]|join('/') }}"
     build_package_name: "{{ build_repo_url.split('/')[-1:][0] }}"
-
-- name: Set build directory
-  set_fact:
     temp_dir: "{{ build_dir }}/{{ build_package_name }}"
 
 - name: Create directory structure
@@ -43,8 +40,6 @@
   environment:
     GOPATH: "{{ temp_dir }}"
     GOBIN: "{{ temp_dir }}/bin"
-    # GOROOT: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}"
-    # PATH: "{{ ansible_env.HOME }}/.gvm/gos/go{{ build_go_version }}/bin:{{ temp_dir }}/bin:{{ ansible_env.PATH }}"
     AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
   register: build_output
@@ -56,15 +51,9 @@
 
 - name: Create Vagrant output directory
   file:
-    path: /vagrant/build-output/{{ build_package_name|string }}
+    path: /{% if is_vagrant %}vagrant{% else %}ansible{% endif %}/build-output/{{ build_package_name|string }}
     state: directory
-  when: is_vagrant
-
-- name: Create Docker output directory
-  file:
-    path: /ansible/build-output/{{ build_package_name|string }}
-    state: directory
-  when: is_docker
+  when: is_vagrant or is_docker
 
 - name: Find newly-built packages
   command: find {{ temp_dir }}/src/{{ build_repo_path }} -name '*deb' -o -name '*rpm' -o -name '*gz' -o -name '*zip'
@@ -72,14 +61,7 @@
   when: is_vagrant or is_docker
 
 - name: Copy newly-built packages to Vagrant root directory
-  command: mv {{ item }} /vagrant/build-output/{{ build_package_name|string }}/
+  command: mv {{ item }} /{% if is_vagrant %}vagrant{% else %}ansible{% endif %}/build-output/{{ build_package_name|string }}/
   with_items:
     - "{{ find_packages.stdout_lines }}"
-  when: is_vagrant
-
-- name: Copy newly-built packages to Docker directory
-  command: mv {{ item }} /ansible/build-output/{{ build_package_name|string }}/
-  with_items:
-    - "{{ find_packages.stdout_lines }}"
-  when: is_docker
-
+  when: is_vagrant or is_docker
