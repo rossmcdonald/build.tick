@@ -6,10 +6,6 @@
     build_repo_path: "{{ build_repo_url.split('/')[-3:]|join('/') }}"
     build_package_name: "{{ build_repo_url.split('/')[-1:][0] }}"
 
-- name: Set more build facts
-  set_fact:
-    temp_dir: "{{ build_dir }}/{{ build_package_name }}"
-
 - name: Remove SSH references from repo URL (if there are any)
   set_fact:
     build_src_path: "{{ build_src_path.split('@')[1:]|join('/') }}"
@@ -24,9 +20,14 @@
 
 - name: Clean SSH repo path
   set_fact:
+    build_package_name: "{{ build_package_name.split('.git')[:-1][0] }}"
     build_src_path: "{{ build_src_path.split('.git')[:-1]|join('/') }}"
     build_repo_path: "{{ build_repo_path.split('.git')[:-1]|join('/') }}"
   when: "'.git' in build_repo_url"
+
+- name: Set more build facts
+  set_fact:
+    temp_dir: "{{ build_dir }}/{{ build_package_name }}"
   
 - name: Create directory structure
   file:
