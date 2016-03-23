@@ -15,10 +15,11 @@ RUN apt-get update && \
     rpm \
     zip \
     python-boto \
-    ansible \
-    python-apt
+    python-apt \
+    python-pip
 
 RUN gem install fpm
+RUN pip install ansible
 
 # Install go
 ENV GO_VERSION 1.4.3
