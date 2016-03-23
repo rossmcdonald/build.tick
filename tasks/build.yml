@@ -14,7 +14,7 @@
   set_fact:
     build_src_path: "{{ build_src_path.split('@')[1:]|join('/') }}"
     build_repo_path: "{{ build_repo_path.split('@')[1:]|join('/') }}"
-  when: 'git@' in build_src_path and 'git@' in build_repo_path
+  when: "'git@' in build_src_path and 'git@' in build_repo_path"
 
 - name: Create directory structure
   file:
