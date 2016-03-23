@@ -4,19 +4,15 @@ MAINTAINER Ross McDonald <mcdonaldrossc+docker@gmail.com>
 RUN apt-get update && \
     apt-get install -y \
     build-essential \
-    gcc \
-    gcc-multilib \
-    bison \
-    binutils \
     git \
-    mercurial \
     curl \
     ruby-dev \
     rpm \
     zip \
     python-boto \
     python-apt \
-    python-pip
+    python-pip \
+    python-dev 
 
 RUN gem install fpm
 RUN pip install ansible

@@ -16,6 +16,7 @@ RUN apt-get update && \
     zip \
     python-boto \
     python-apt \
+    python-dev \
     python-pip
 
 RUN gem install fpm
