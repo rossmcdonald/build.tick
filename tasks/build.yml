@@ -14,8 +14,20 @@
   set_fact:
     build_src_path: "{{ build_src_path.split('@')[1:]|join('/') }}"
     build_repo_path: "{{ build_repo_path.split('@')[1:]|join('/') }}"
-  when: "'git@' in build_src_path and 'git@' in build_repo_path"
+  when: "'git@' in build_repo_url"
 
+- name: Clean SSH repo path
+  set_fact:
+    build_src_path: "{{ build_src_path.split(':')|join('/') }}"
+    build_repo_path: "{{ build_repo_path.split(':')|join('/') }}"
+  when: "':' in build_repo_url"
+
+- name: Clean SSH repo path
+  set_fact:
+    build_src_path: "{{ build_src_path.split('.git')[:-1]|join('/') }}"
+    build_repo_path: "{{ build_repo_path.split('.git')[:-1]|join('/') }}"
+  when: "'.git' in build_repo_url"
+  
 - name: Create directory structure
   file:
     path: "{{ temp_dir }}/src/{{ build_src_path }}"
