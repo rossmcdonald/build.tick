@@ -10,6 +10,12 @@
   set_fact:
     temp_dir: "{{ build_dir }}/{{ build_package_name }}"
 
+- name: Remove SSH references from repo URL (if there are any)
+  set_fact:
+    build_src_path: "{{ build_src_path.split('@')[1:]|join('/') }}"
+    build_repo_path: "{{ build_repo_path.split('@')[1:]|join('/') }}"
+  when: 'git@' in build_src_path and 'git@' in build_repo_path
+
 - name: Create directory structure
   file:
     path: "{{ temp_dir }}/src/{{ build_src_path }}"

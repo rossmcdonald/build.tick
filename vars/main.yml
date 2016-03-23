@@ -3,3 +3,5 @@ is_vagrant: no
 is_docker: no
 copy_output_packages: yes
 build_run_generate: no
+aws_access_key:
+aws_secret_key:
