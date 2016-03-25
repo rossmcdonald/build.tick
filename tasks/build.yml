@@ -59,6 +59,7 @@
     {% if build_run_generate %}--generate {% endif %}
     {% if build_tags != None %}--build-tags={{ build_tags|join(',') }} {% endif %}
     {% if build_output_name != None %}--name={{ build_output_name }} {% endif %}
+    {% if build_static %}--static {% endif %}
   args:
      chdir: "{{ temp_dir }}/src/{{ build_repo_path }}"
   environment:

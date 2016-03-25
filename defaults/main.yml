@@ -15,6 +15,8 @@ build_upload_bucket:
 build_platform: linux
 # Build architecture (arm, amd64, i386)
 build_arch: amd64
+# Build statically-compiled binaries (for Linux only)
+build_static: no
 # The repo to pull from
 build_repo_url: https://github.com/influxdata/influxdb
 
