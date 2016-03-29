@@ -1,0 +1,13 @@
+---
+build_repo_url: https://github.com/influxdata/influxdb
+build_branch: master
+build_master_version: 0.12.0
+build_iteration:
+build_rc:
+build_run_generate: no
+build_nightly: yes
+build_upload_to_s3: no
+build_upload_bucket: 
+build_platform: linux
+build_arch: amd64
+build_static: no
