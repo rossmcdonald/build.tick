@@ -60,6 +60,7 @@
     {% if build_tags != None %}--build-tags={{ build_tags|join(',') }} {% endif %}
     {% if build_output_name != None %}--name={{ build_output_name }} {% endif %}
     {% if build_static %}--static {% endif %}
+    {% if build_sign %}--sign {% endif %}
   args:
      chdir: "{{ temp_dir }}/src/{{ build_repo_path }}"
   environment:
@@ -67,6 +68,7 @@
     GOBIN: "{{ temp_dir }}/bin"
     AWS_ACCESS_KEY_ID: "{{ aws_access_key }}"
     AWS_SECRET_ACCESS_KEY: "{{ aws_secret_key }}"
+    GNUPG_HOME: "{{ gpg_home|default(None) }}"
   register: build_output
   ignore_errors: yes
 
